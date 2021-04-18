@@ -2,7 +2,8 @@
 users: # namespace, only single level namespace is supported and mandatory
   db: users_db
   table_name: users
-  default: &default
-    email: example@admin.com
-    nickname: Martin
-    age: 18
+  rows:
+    default: &default
+      email: example@admin.com
+      nickname: Martin
+      age: 18
