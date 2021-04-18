@@ -2,8 +2,17 @@
 users: # namespace, only single level namespace is supported and mandatory
   db: users_db
   table_name: users
+  associations:
+    has_many:
+      coupons:
+        primary_key: id
+        foreign_key: user_id
   rows:
     default: &default
       email: example@admin.com
-      nickname: Martin
+      nickname: ${faker.Username()}
       age: 18
+    user_with_coupons:
+      coupons:
+        - @coupons.twenty_discount
+        - @coupons.three_hundred_discount
