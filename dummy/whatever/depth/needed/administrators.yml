@@ -1,0 +1,9 @@
+---
+administrators: # namespace, only single level namespace is supported and mandatory
+  db: admin_db
+  table_name: admin_users
+  default: &default
+    email: example@admin.com
+    nickname: Martin
+    premissions: 0
+    role: Super Admin

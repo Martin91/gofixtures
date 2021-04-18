@@ -2,8 +2,9 @@ package fixtures
 
 import (
 	"database/sql"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoad(t *testing.T) {
@@ -41,6 +42,8 @@ func TestLoad(t *testing.T) {
 
 			if tt.judgeResult {
 				assert.NotEmpty(t, fixtures.fixtures["coupons.twenty_discount"])
+				assert.NotEmpty(t, fixtures.fixtures["users.default"])
+				assert.NotEmpty(t, fixtures.fixtures["administrators.default"])
 			}
 		})
 	}
