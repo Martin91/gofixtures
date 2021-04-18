@@ -1,7 +1,11 @@
 // Package fixtures implements a Ruby on Rails style test fixtures suite
 package fixtures
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+	"os"
+)
 
 // Fixtures an utility to hold definitions of fixtures
 type Fixtures struct {
@@ -29,6 +33,16 @@ type Fixture struct {
 }
 
 func Load(path string, db *sql.Conn) (*Fixtures, error) {
+	stat, err := os.Stat(path)
+	if err == nil {
+		if !stat.IsDir() {
+			err = fmt.Errorf("path %s is not a directory", path)
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+
 	fixtures := &Fixtures{
 		path: path,
 		db:   db,
