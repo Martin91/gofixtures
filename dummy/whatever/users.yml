@@ -1,0 +1,25 @@
+---
+users: # namespace, only single level namespace is supported and mandatory
+  db: users_db
+  table_name: coupon
+  default: &default
+    coupon_id: 1
+    coupon_name: 90% off
+    name: 90% off
+    amount: 100
+    min_point: 1000
+    valid_day: 31
+    per_limit: 1
+    use_type: 1
+    superimposed: 1
+    order_limit: 2
+    note: something worth mentioned
+    create_time: 1578388191
+  twenty_discount: # fixtures under specified namespace
+    <<: *default # inherit from default
+    coupon_name: 20 discount
+    amount: 20
+  three_hundred_discount: # fixtures under specified namespace
+    <<: *default
+    coupon_name: 300 discount!
+    amount: 300
