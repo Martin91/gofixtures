@@ -2,13 +2,8 @@
 coupons: # collection of fixtures
   db: coupon_db
   table_name: coupons
-  associations:
-    belongs_to:
-      user:
-        primary_key: id
-        foreign_key: user_id
   rows:
-    default: &default
+    DEFAULT: &DEFAULT
       coupon_id: 1
       coupon_name: 90% off
       name: 90% off
@@ -17,14 +12,11 @@ coupons: # collection of fixtures
       note: something worth mentioned
       create_time: ${Now()}
       update_time: ${Now()}
-    default_with_user:
-      <<: *default
-      user: @user.default # reference
     twenty_discount: # fixtures under specified namespace
-      <<: *default # inherit from default
+      <<: *DEFAULT # inherit from default
       coupon_name: 20 discount
       amount: 20
     three_hundred_discount: # fixtures under specified namespace
-      <<: *default
+      <<: *DEFAULT
       coupon_name: 300 discount!
       amount: 300

@@ -3,8 +3,10 @@ administrators: # namespace, only single level namespace is supported and mandat
   db: admin_db
   table_name: admin_users
   rows:
-    default: &default
+    DEFAULT: &DEFAULT
       email: example@admin.com
       nickname: Martin
       premissions: 0
       role: Super Admin
+    test_admin:
+      <<: *DEFAULT
