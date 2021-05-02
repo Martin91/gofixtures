@@ -1,12 +1,14 @@
 ---
-users: # namespace, only single level namespace is supported and mandatory
-  db: users_db
+users: # collection of fixtures
+  db: fixtures_demo
   table_name: users
   rows:
     DEFAULT: &DEFAULT
-      email: example@admin.com
-      nickname: ${faker.Username()}
+      email: ${Email()}
+      nickname: ${Username()}
       age: 18
+      created_at: ${Date()}
+      updated_at: ${Date()}
     user_age_20:
       <<: *DEFAULT
       age: 20

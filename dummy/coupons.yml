@@ -1,6 +1,6 @@
 ---
 coupons: # collection of fixtures
-  db: coupon_db
+  db: fixtures_demo
   table_name: coupons
   rows:
     DEFAULT: &DEFAULT

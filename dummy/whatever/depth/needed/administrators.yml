@@ -1,6 +1,6 @@
 ---
-administrators: # namespace, only single level namespace is supported and mandatory
-  db: admin_db
+administrators: # collection of fixtures
+  db: fixtures_demo
   table_name: admin_users
   rows:
     DEFAULT: &DEFAULT

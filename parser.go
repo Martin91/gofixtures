@@ -28,7 +28,11 @@ func (f *Fixtures) loadWalker(path string, d os.FileInfo, _ error) error {
 }
 
 func (f *Fixtures) Load() error {
-	return filepath.Walk(f.path, f.loadWalker)
+	if err := filepath.Walk(f.path, f.loadWalker); err != nil {
+		return err
+	}
+
+	return f.insertData()
 }
 
 func (f *Fixtures) Parse(content []byte) error {
