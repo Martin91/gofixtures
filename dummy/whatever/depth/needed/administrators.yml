@@ -1,0 +1,12 @@
+---
+administrators: # collection of fixtures
+  db: fixtures_demo
+  table_name: admin_users
+  rows:
+    DEFAULT: &DEFAULT
+      email: example@admin.com
+      nickname: Martin
+      premissions: 0
+      role: Super Admin
+    test_admin:
+      <<: *DEFAULT
