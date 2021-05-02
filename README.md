@@ -1,5 +1,5 @@
 # gofixtures
-Ruby on Rails' style test fixtures for Golang
+Ruby on Rails' style test fixtures for Golang, use database transation to keep database clean state
 
 ## Getting started
 
