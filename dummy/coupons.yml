@@ -1,20 +1,22 @@
 ---
 coupons: # collection of fixtures
-  db: coupon_db
+  db: fixtures_demo
   table_name: coupons
-  default: &default
-    coupon_id: 1
-    coupon_name: 90% off
-    name: 90% off
-    amount: 100
-    order_limit: 2
-    note: something worth mentioned
-    create_time: 1578388191
-  twenty_discount: # fixtures under specified namespace
-    <<: *default # inherit from default
-    coupon_name: 20 discount
-    amount: 20
-  three_hundred_discount: # fixtures under specified namespace
-    <<: *default
-    coupon_name: 300 discount!
-    amount: 300
+  rows:
+    DEFAULT: &DEFAULT
+      coupon_id: 1
+      coupon_name: 90% off
+      name: 90% off
+      amount: 100
+      order_limit: 2
+      note: something worth mentioned
+      create_time: ${Now()}
+      update_time: ${Now()}
+    twenty_discount: # fixtures under specified namespace
+      <<: *DEFAULT # inherit from default
+      coupon_name: 20 discount
+      amount: 20
+    three_hundred_discount: # fixtures under specified namespace
+      <<: *DEFAULT
+      coupon_name: 300 discount!
+      amount: 300
