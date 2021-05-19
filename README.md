@@ -20,33 +20,27 @@ go get -u github.com/Martin91/gofixtures
 
     // fixtures is dependent on https://github.com/DATA-DOG/go-txdb to rollback fixtures automatically,
     //  so it is required to setup a transational *sql.DB by fixtures
-    db, err := fixtures.OpenDB("mysql", "root:@tcp(localhost:3306)/?charset=utf8&parseTime=True&loc=Local")
-    if err != nil {
-        panic(err)
-    }
-
-    fixtures, err := fixtures.Load(tt.args.path, db)
-    if err != nil {
-        panic(err)
-    }
+    db := fixtures.OpenDB("mysql", "root:@tcp(localhost:3306)/?charset=utf8&parseTime=True&loc=Local")
+    fixtures := fixtures.Load(tt.args.path, db)
 
     // do your test and something else
 
-    // once the program exit or db.Close() is called, fixtures will rollback all database changes
+    // once the program exit, fixtures will rollback all database changes automatically
     ```
 
 ## NOTICE
 This repository is still under active development and the overall design and performance is unstable.
 
 ## Features (WIP, please keep looking forward to it)
-1. YAML based simple and clean syntax
-2. Built-in [Faker](https://github.com/bxcodec/faker/) supported
-3. Bundled field evaluators, enable you to custome dynamic data generation
-4. Support specifying database and tables
-5. Based on standard `sql` package, compatible with different dialects
-6. Transaction based database cleaner
+[x] YAML based simple and clean syntax
+[x] Built-in [Faker](https://github.com/bxcodec/faker/) supported
+[x] Bundled field evaluators, enable you to customize dynamic data generation
+[x] Support specifying database and tables
+[x] Based on standard `sql` package, compatible with different dialects
+[x] Transaction based database cleaner
+[ ] Templates to support batch data
 
 ## TODOs
 1. Test with different databases
 2. Complete test cases with high test coverage
-3. Review the overall archtecture design
+3. Review the overall architecture design

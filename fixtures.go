@@ -31,8 +31,8 @@ func (f *Fixtures) insertData() error {
 // registeredDrivers Ensure that registering each driver exactly once globally
 var registeredDrivers = sync.Map{}
 
-// OpenDB setup a transactional db to automatically rollback db changes
-func OpenDB(driverName, dsn string) (*sql.DB, error) {
+// OpenDB setup a transactional db to automatically rollback db changes, it may panics if any error encountered
+func OpenDB(driverName, dsn string) *sql.DB {
 	var txDriverName string
 	txDriver, ok := registeredDrivers.Load(driverName)
 	if !ok {
@@ -42,25 +42,34 @@ func OpenDB(driverName, dsn string) (*sql.DB, error) {
 	} else {
 		txDriverName = txDriver.(string)
 	}
-	return sql.Open(txDriverName, dsn)
+	if db, err := sql.Open(txDriverName, dsn); err != nil {
+		panic(err)
+	} else {
+		return db
+	}
 }
 
-// Load parse yaml files under the directory specified by `path`
-func Load(path string, db *sql.DB) (*Fixtures, error) {
+// Load parse yaml files under the directory specified by `path`, it may panics if any error encountered
+func Load(path string, db *sql.DB) *Fixtures {
 	stat, err := os.Stat(path)
 	if err == nil {
 		if !stat.IsDir() {
 			err = fmt.Errorf("path %s is not a directory", path)
 		}
 	}
-	if err != nil {
-		return nil, err
+
+	var fixtures *Fixtures
+	if err == nil {
+		fixtures = &Fixtures{
+			path:        path,
+			db:          db,
+			collections: map[string]*Collection{},
+		}
+		err = fixtures.Load()
 	}
 
-	fixtures := &Fixtures{
-		path:        path,
-		db:          db,
-		collections: map[string]*Collection{},
+	if err != nil {
+		panic(err)
 	}
-	return fixtures, fixtures.Load()
+	return fixtures
 }
