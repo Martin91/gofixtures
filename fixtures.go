@@ -2,7 +2,9 @@
 package fixtures
 
 import (
+	"crypto/sha1"
 	"database/sql"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"sync"
@@ -31,14 +33,26 @@ func (f *Fixtures) insertData() error {
 // registeredDrivers Ensure that registering each driver exactly once globally
 var registeredDrivers = sync.Map{}
 
+func driverID(driverName, dsn string) string {
+	return shortenID(fmt.Sprintf("%s_%s", driverName, dsn))
+}
+
+func shortenID(id string) string {
+	c := sha1.New()
+	c.Write([]byte(id))
+	ret := hex.EncodeToString(c.Sum(nil))
+	return ret[:8]
+}
+
 // OpenDB setup a transactional db to automatically rollback db changes, it may panics if any error encountered
 func OpenDB(driverName, dsn string) *sql.DB {
 	var txDriverName string
-	txDriver, ok := registeredDrivers.Load(driverName)
+	driverID := driverID(driverName, dsn)
+	txDriver, ok := registeredDrivers.Load(driverID)
 	if !ok {
-		txDriverName = fmt.Sprintf("tx%sdb", driverName)
+		txDriverName = fmt.Sprintf("tx%sdb", driverID)
 		txdb.Register(txDriverName, driverName, dsn)
-		registeredDrivers.Store(driverName, txDriverName)
+		registeredDrivers.Store(driverID, txDriverName)
 	} else {
 		txDriverName = txDriver.(string)
 	}
