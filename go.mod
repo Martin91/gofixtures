@@ -2,7 +2,7 @@ module github.com/Martin91/gofixtures
 
 go 1.15
 
-replace github.com/DATA-DOG/go-txdb v0.1.4 => github.com/martin91/go-txdb v0.0.0-20210522093124-3127091b834d
+replace github.com/DATA-DOG/go-txdb v0.1.4 => github.com/martin91/go-txdb v0.0.0-20210522103453-a6eaffbdb2e9
 
 require (
 	github.com/DATA-DOG/go-txdb v0.1.4
