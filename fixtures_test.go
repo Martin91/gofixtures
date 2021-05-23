@@ -16,7 +16,7 @@ func TestLoad(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		wantErr     bool
+		wantPanic   bool
 		judgeResult bool
 	}{
 		{
@@ -24,7 +24,7 @@ func TestLoad(t *testing.T) {
 			args: args{
 				path: "path/not/existed",
 			},
-			wantErr: true,
+			wantPanic: true,
 		},
 		{
 			name: "existed directory path",
@@ -36,6 +36,12 @@ func TestLoad(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			defer func() {
+				err := recover()
+				if tt.wantPanic {
+					assert.NotNil(t, err)
+				}
+			}()
 			db := OpenDB("mysql", "root:@tcp(localhost:3306)/?charset=utf8&parseTime=True&loc=Local")
 			fixtures := Load(tt.args.path, db)
 
