@@ -1,6 +1,6 @@
 ---
 coupons: # collection of fixtures
-  db: fixtures_demo
+  db: gofixtures_test
   table_name: coupons
   rows:
     DEFAULT: &DEFAULT

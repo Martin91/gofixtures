@@ -42,7 +42,7 @@ func TestLoad(t *testing.T) {
 					assert.NotNil(t, err)
 				}
 			}()
-			db := OpenDB("mysql", "root:@tcp(localhost:3306)/?charset=utf8&parseTime=True&loc=Local")
+			db := OpenDB("mysql", "root:@tcp(127.0.0.1:6606)/?charset=utf8&parseTime=True&loc=Local")
 			fixtures := Load(tt.args.path, db)
 
 			if tt.judgeResult {
