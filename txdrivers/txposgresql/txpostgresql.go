@@ -1,4 +1,4 @@
-// Package txmysql registers a txmysql sql driver
+// Package txpostgresql registers a txpostgresql sql driver
 package txpostgresql
 
 import (
