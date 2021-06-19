@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/Martin91/gofixtures/txdrivers/base"
+	_ "github.com/lib/pq"
 )
 
 type driver struct {
