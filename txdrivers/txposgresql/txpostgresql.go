@@ -15,6 +15,7 @@ func init() {
 	sql.Register("txpostgresql", &TxMySQLDriver{
 		TxDriver: base.TxDriver{
 			RealDriver: "postgres",
+			SavePoint: &base.DefaultSavePoint{},
 		},
 	})
 }

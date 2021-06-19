@@ -15,6 +15,7 @@ type iTxDriver interface {
 // TxDriver root type for all other inheriting and transactional drivers
 type TxDriver struct {
 	sync.Mutex
+	SavePoint   SavePointIface
 	RealDriver  string           // underlying sql driver used to establish real db connections
 	connections map[string]*conn // maintains connections isolated by different DSNs
 }
@@ -39,7 +40,12 @@ func (d *TxDriver) Open(dsn string) (driver.Conn, error) {
 		if db, err := sql.Open(d.RealDriver, dsn); err != nil {
 			return nil, err
 		} else {
-			connection = &conn{driver: d, db: db, dsn: dsn}
+			connection = &conn{
+				driver:        d,
+				db:            db,
+				dsn:           dsn,
+				savePointImpl: d.SavePoint,
+			}
 			d.connections[dsn] = connection
 		}
 	}

@@ -15,6 +15,7 @@ func init() {
 	sql.Register("txmysql", &TxMySQLDriver{
 		TxDriver: base.TxDriver{
 			RealDriver: "mysql",
+			SavePoint: &base.DefaultSavePoint{},
 		},
 	})
 }
