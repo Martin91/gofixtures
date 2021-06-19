@@ -5,6 +5,7 @@ type tx struct {
 	conn *conn
 }
 
+// Commit release a savepoint if there is one, otherwise do nothing
 func (tx *tx) Commit() error {
 	if tx.conn.savePointImpl == nil {
 		return nil // save point is not supported
@@ -22,6 +23,7 @@ func (tx *tx) Commit() error {
 	return err
 }
 
+// Rollback discard a savepoint if there is one, otherwise do nothing
 func (tx *tx) Rollback() error {
 	if tx.conn.savePointImpl == nil {
 		return nil // save point is not supported

@@ -30,12 +30,12 @@ func (s *stmt) Query(args []driver.Value) (driver.Rows, error) {
 	return buildRows(rows)
 }
 
-// Implement the "StmtExecContext" interface
+// ExecContext Implement the "StmtExecContext" interface
 func (s *stmt) ExecContext(ctx context.Context, args []driver.NamedValue) (driver.Result, error) {
 	return s.st.ExecContext(ctx, mapNamedArgs(args)...)
 }
 
-// Implement the "StmtQueryContext" interface
+// QueryContext Implement the "StmtQueryContext" interface
 func (s *stmt) QueryContext(ctx context.Context, args []driver.NamedValue) (driver.Rows, error) {
 	rows, err := s.st.QueryContext(ctx, mapNamedArgs(args)...)
 	if err != nil {

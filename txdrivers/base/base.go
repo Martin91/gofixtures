@@ -19,7 +19,7 @@ type TxDriver struct {
 	connections map[string]*conn // maintains connections isolated by different DSNs
 }
 
-// ManualRollback
+// ManualRollback allow user to control the rollback point
 func (d *TxDriver) ManualRollback() {
 	d.Lock()
 	defer d.Unlock()
