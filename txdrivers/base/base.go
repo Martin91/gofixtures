@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-type iTxDriver interface {
+type TxDriverIface interface {
 	ManualRollback()
 	DeleteConn(string)
 }
@@ -45,6 +45,9 @@ func (d *TxDriver) Open(dsn string) (driver.Conn, error) {
 				db:            db,
 				dsn:           dsn,
 				savePointImpl: d.SavePoint,
+			}
+			if d.connections == nil {
+				d.connections = map[string]*conn{}
 			}
 			d.connections[dsn] = connection
 		}

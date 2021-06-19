@@ -10,7 +10,7 @@ import (
 
 type conn struct {
 	sync.Mutex
-	driver        iTxDriver
+	driver        TxDriverIface
 	dsn           string
 	occupied      int
 	tx            *sql.Tx
@@ -28,11 +28,7 @@ func (c *conn) ManualRollback() error {
 		if err := c.tx.Rollback(); err != nil {
 			return err
 		}
-		if newTx, err := c.beginOnce(); err != nil {
-			return err
-		} else {
-			c.tx = newTx
-		}
+		c.tx = nil
 	}
 	return nil
 }
