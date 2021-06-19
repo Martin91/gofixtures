@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: gofixtures_test
+      POSTGRES_PASSWORD: ''
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 2345:5432
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: gofixtures_test
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - 6606:3306
