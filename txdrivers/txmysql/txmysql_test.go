@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
+	"sync"
 	"testing"
 )
 
@@ -102,4 +103,60 @@ func TestTxMySQLDriverWithBegin(t *testing.T) {
 	err = row.Scan(&count)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, count)
+}
+
+func TestTxMySQLDriverWithGoroutines(t *testing.T) {
+	wg := sync.WaitGroup{}
+	ch1 := make(chan bool, 1)
+	ch2 := make(chan bool, 1)
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		tx, _ := txMySQLDB.Begin()
+		result, err := tx.Exec("INSERT INTO users (`nickname`) VALUES ('may'), ('april')")
+		assert.Nil(t, err)
+		rowsAffected, err := result.RowsAffected()
+		assert.Nil(t, err)
+		assert.Equal(t, 2, int(rowsAffected))
+		ch1 <- true
+		select {
+		case <- ch2:
+			tx.Rollback()
+			ch1 <- true
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		var tx *sql.Tx
+		select {
+		case <- ch1:
+			tx, _ = txMySQLDB.Begin()
+			tx.Exec("INSERT INTO users (`nickname`) VALUES ('july'), ('Sep')")
+			var count int
+			row := txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+			row.Scan(&count)
+			assert.Equal(t, 7, count) // both goroutines run in a same connection actually, so there is no isolation
+			ch2 <- true
+		}
+
+		select {
+		case <- ch1:
+			var count int
+			row := txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+			row.Scan(&count)
+			assert.Equal(t, 3, count) // the first goroutine will rollback to the earlier savepoint
+
+			tx.Rollback()
+			row = txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+			row.Scan(&count)
+			assert.Equal(t, 3, count)
+		}
+	}()
+
+	wg.Wait()
 }
