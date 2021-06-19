@@ -7,12 +7,12 @@ import (
 	"github.com/Martin91/gofixtures/txdrivers/base"
 )
 
-type TxMySQLDriver struct {
+type driver struct {
 	base.TxDriver
 }
 
 func init() {
-	sql.Register("txmysql", &TxMySQLDriver{
+	sql.Register("txmysql", &driver{
 		TxDriver: base.TxDriver{
 			RealDriver: "mysql",
 			SavePoint: &base.DefaultSavePoint{},
