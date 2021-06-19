@@ -87,9 +87,6 @@ func (c *conn) Begin() (driver.Tx, error) {
 		return &tx{"_", c}, nil // save point is not supported
 	}
 
-	c.Lock()
-	defer c.Unlock()
-
 	connTx, err := c.beginOnce()
 	if err != nil {
 		return nil, err

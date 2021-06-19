@@ -62,3 +62,44 @@ func TestTxMySQLDriverRunsInAGlobalTransaction(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3, count)
 }
+
+func TestTxMySQLDriverWithBegin(t *testing.T) {
+	tx, err := txMySQLDB.Begin()
+	assert.Nil(t, err)
+	result, err := tx.Exec("INSERT INTO users (`nickname`) VALUES ('test'), ('value')")
+	assert.Nil(t, err)
+	rowsAffected, err := result.RowsAffected()
+	assert.Equal(t, int64(2), rowsAffected)
+
+	var count int
+	row := tx.QueryRow("SELECT COUNT(*) FROM users")
+	row.Scan(&count)
+	assert.Equal(t, 5, count)
+
+	tx.Rollback()
+	row = txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+	row.Scan(&count)
+	assert.Equal(t, 3, count)
+
+	tx, _ = txMySQLDB.Begin()
+	tx.Exec("INSERT INTO users (`nickname`) VALUES ('july'), ('june')")
+	tx.Commit()
+
+	tx, _ = txMySQLDB.Begin()
+	tx.Exec("INSERT INTO users (`nickname`) VALUES ('may'), ('april')")
+	row = tx.QueryRow("SELECT COUNT(*) FROM users")
+	row.Scan(&count)
+	assert.Equal(t, 7, count)
+
+	tx.Rollback()
+	row = txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+	row.Scan(&count)
+	assert.Equal(t, 5, count)
+
+	driver := txMySQLDB.Driver().(base.TxDriverIface)
+	driver.ManualRollback()
+	row = txMySQLDB.QueryRow("SELECT COUNT(*) FROM users")
+	err = row.Scan(&count)
+	assert.Nil(t, err)
+	assert.Equal(t, 3, count)
+}
