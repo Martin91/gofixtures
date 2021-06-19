@@ -46,9 +46,18 @@ func TestLoad(t *testing.T) {
 			fixtures := Load(tt.args.path, db)
 
 			if tt.judgeResult {
-				assert.NotEmpty(t, fixtures.collections["coupons"])
-				assert.NotEmpty(t, fixtures.collections["users"])
-				assert.NotEmpty(t, fixtures.collections["administrators"])
+				count := int(0)
+				row := db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.coupons")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 2, count)
+
+				row = db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.users")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 4, count)
+
+				row = db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.admin_users")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 1, count)
 				fmt.Printf("%+v\n", fixtures)
 			}
 		})

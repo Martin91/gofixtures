@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/Martin91/gofixtures/txdrivers"
+	_ "github.com/Martin91/gofixtures/txdrivers/txmysql"
+	_ "github.com/Martin91/gofixtures/txdrivers/txposgresql"
 	"github.com/pkg/errors"
 	"os"
 )
