@@ -42,13 +42,22 @@ func TestLoad(t *testing.T) {
 					assert.NotNil(t, err)
 				}
 			}()
-			db := OpenDB("mysql", "root:@tcp(localhost:3306)/?charset=utf8&parseTime=True&loc=Local")
+			db := OpenDB("mysql", "root:@tcp(127.0.0.1:6606)/?charset=utf8&parseTime=True&loc=Local")
 			fixtures := Load(tt.args.path, db)
 
 			if tt.judgeResult {
-				assert.NotEmpty(t, fixtures.collections["coupons"])
-				assert.NotEmpty(t, fixtures.collections["users"])
-				assert.NotEmpty(t, fixtures.collections["administrators"])
+				count := int(0)
+				row := db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.coupons")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 2, count)
+
+				row = db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.users")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 4, count)
+
+				row = db.QueryRow("SELECT COUNT(*) FROM gofixtures_test.admin_users")
+				assert.Nil(t, row.Scan(&count))
+				assert.Equal(t, 1, count)
 				fmt.Printf("%+v\n", fixtures)
 			}
 		})

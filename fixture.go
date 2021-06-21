@@ -51,7 +51,5 @@ func (f *Fixture) insertRow(db *sql.DB, tableName string) error {
 	valuesSQL := strings.Join(placeholders, ", ")
 	sql := fmt.Sprintf(sqlPattern, tableName, columnsSQL, valuesSQL)
 	_, err := db.Exec(sql, values...)
-	fmt.Println("err: ", err)
-
 	return err
 }

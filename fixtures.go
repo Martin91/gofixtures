@@ -2,15 +2,13 @@
 package fixtures
 
 import (
-	"crypto/sha1"
 	"database/sql"
-	"encoding/hex"
 	"fmt"
-	"os"
-	"sync"
-
-	"github.com/DATA-DOG/go-txdb"
+	"github.com/Martin91/gofixtures/txdrivers"
+	_ "github.com/Martin91/gofixtures/txdrivers/txmysql"
+	_ "github.com/Martin91/gofixtures/txdrivers/txposgresql"
 	"github.com/pkg/errors"
+	"os"
 )
 
 // Fixtures an utility to hold definitions of fixtures
@@ -30,32 +28,10 @@ func (f *Fixtures) insertData() error {
 	return nil
 }
 
-// registeredDrivers Ensure that registering each driver exactly once globally
-var registeredDrivers = sync.Map{}
-
-func driverID(driverName, dsn string) string {
-	return shortenID(fmt.Sprintf("%s_%s", driverName, dsn))
-}
-
-func shortenID(id string) string {
-	c := sha1.New()
-	c.Write([]byte(id))
-	ret := hex.EncodeToString(c.Sum(nil))
-	return ret[:8]
-}
-
 // OpenDB setup a transactional db to automatically rollback db changes, it may panics if any error encountered
+// 	driverName is the actually underlying driver, for example, `mysql`
 func OpenDB(driverName, dsn string) *sql.DB {
-	var txDriverName string
-	driverID := driverID(driverName, dsn)
-	txDriver, ok := registeredDrivers.Load(driverID)
-	if !ok {
-		txDriverName = fmt.Sprintf("tx%sdb", driverID)
-		txdb.Register(txDriverName, driverName, dsn)
-		registeredDrivers.Store(driverID, txDriverName)
-	} else {
-		txDriverName = txDriver.(string)
-	}
+	txDriverName := txdrivers.TxDriverName(driverName)
 	if db, err := sql.Open(txDriverName, dsn); err != nil {
 		panic(err)
 	} else {

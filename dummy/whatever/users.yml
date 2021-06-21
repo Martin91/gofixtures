@@ -1,14 +1,12 @@
 ---
 users: # collection of fixtures
-  db: fixtures_demo
+  db: gofixtures_test
   table_name: users
   rows:
     DEFAULT: &DEFAULT
-      email: ${Email()}
       nickname: ${Username()}
-      age: 18
-      created_at: ${Date()}
-      updated_at: ${Date()}
+      ctime: ${Date()}
+      mtime: ${Date()}
     user_age_20:
       <<: *DEFAULT
-      age: 20
+      nickname: Martin
