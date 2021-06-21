@@ -36,13 +36,13 @@ This repository is still under active development and the overall design and per
 
 ## Features (WIP, please keep looking forward to it)
 
-[x] YAML based simple and clean syntax
-[x] Built-in [Faker](https://github.com/bxcodec/faker/) supported
-[x] Bundled field evaluators, enable you to customize dynamic data generation
-[x] Support specifying database and tables
-[x] Based on standard `sql` package, compatible with different dialects
-[x] Transaction based database cleaner
-[ ] Templates to support batch data
+[x] YAML based simple and clean syntax  
+[x] Built-in [Faker](https://github.com/bxcodec/faker/) supported  
+[x] Bundled field evaluators, enable you to customize dynamic data generation  
+[x] Support specifying database and tables  
+[x] Based on standard `sql` package, compatible with different dialects  
+[x] Transaction based database cleaner  
+[ ] Templates to support batch data  
 
 ## TODOs
 1. Test with different databases
