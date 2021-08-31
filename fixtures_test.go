@@ -33,6 +33,13 @@ func TestLoad(t *testing.T) {
 			},
 			judgeResult: true,
 		},
+		{
+			name: "existed file path",
+			args: args{
+				path: "dummy/coupons.yml",
+			},
+			judgeResult: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -42,13 +42,7 @@ func OpenDB(driverName, dsn string) *sql.DB {
 
 // Load parse yaml files under the directory specified by `path`, it may panics if any error encountered
 func Load(path string, db *sql.DB) *Fixtures {
-	stat, err := os.Stat(path)
-	if err == nil {
-		if !stat.IsDir() {
-			err = fmt.Errorf("path %s is not a directory", path)
-		}
-	}
-
+	_, err := os.Stat(path)
 	var fixtures *Fixtures
 	if err == nil {
 		fixtures = &Fixtures{
