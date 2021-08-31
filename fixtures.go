@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/Martin91/gofixtures/txdrivers"
+	"github.com/Martin91/gofixtures/txdrivers/base"
 	_ "github.com/Martin91/gofixtures/txdrivers/txmysql"
 	_ "github.com/Martin91/gofixtures/txdrivers/txposgresql"
 	"github.com/pkg/errors"
@@ -62,4 +63,13 @@ func Load(path string, db *sql.DB) *Fixtures {
 		panic(err)
 	}
 	return fixtures
+}
+
+// Rollback manually rollback all changes since last call on Load
+func Rollback(db *sql.DB) error {
+	if txDriver, ok := db.Driver().(base.TxDriverIface); ok {
+		txDriver.ManualRollback()
+		return nil
+	}
+	return fmt.Errorf("it seems like that this db is not driven by our transational driver")
 }
